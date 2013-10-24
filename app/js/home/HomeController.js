@@ -6,7 +6,7 @@ angular.module('exampleApp', []).controller("HomeCtrl", ['$scope', '$http', '$lo
     $scope.loginUser = { username: '', password: '' };
 
 	$scope.authenticateUser = function() {
-		if (((this.loginUser.username) && (this.loginUser.username.trim().toLowerCase().length > 0)) && ((this.loginUser.password) && (this.loginUser.password.trim().toLowerCase().length > 0))) {
+		if (((this.loginUser.username) && (this.loginUser.username.trim().length > 0)) && ((this.loginUser.password) && (this.loginUser.password.trim()..length > 0))) {
 			var that = this;
 
 			// Set up the user for authentication

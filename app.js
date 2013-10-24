@@ -12,7 +12,11 @@ app.configure(function() {
   app.use(passport.session());
 });
 
+// Fire up node
+
 var http = require('http').createServer(app).listen(8080);
+
+// Functions for handling users
 
 var users = require('./node_data_access/controllers/users');
 
