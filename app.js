@@ -124,22 +124,37 @@ app.del('/auth', function(req, res, next) {
 
 // Checking if someone is currrently authenticated, call this at the start of every page to check for the user
 
-app.post('/checkAuthenticated', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) {
-      return res.send({ status: "failed" });
+app.get('/checkAuthenticated', function(req, res, next) {
+  if (req.isAuthenticated()) {
+    var authenticatedUser = {
+      _id: req.user._id, 
+      username: req.user.username
     }
-    else if (!user) {
-      return res.send({ status: "failed" });
-    }
-    else {
-      req.logIn(user, function(err) {
-        if (err) return res.send({ status: "failed" });
-        
-        user.password = null;
+    
+    return res.send({ status: "success", user: user });
+  }
+  else {
+    var cookies = [];
 
-        return res.send({ status: "success", user: user });
+    req.headers.cookie && req.headers.cookie.split(';').forEach(function( cookie ) {
+      var parts = cookie.split('=');
+      cookies[ parts[ 0 ].trim() ] = ( parts[ 1 ] || '' ).trim();
+    });
+
+    if(cookies["myJam_sessionId"]) {
+      users.getById(cookies["my_cookie_name"], function(err, user) {
+        if (user) {
+          req.login(user, function(err) {
+            return res.send({ status: "success", user: user });
+          });
+        }
+        else {
+          return res.send({ status: "failed" });
+        }
       });
     }
-  })(req, res, next);
+    else {
+        return res.send({ status: "failed" });
+    }
+  }
 });
