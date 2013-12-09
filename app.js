@@ -141,7 +141,7 @@ app.get('/checkAuthenticated', function(req, res, next) {
       cookies[ parts[ 0 ].trim() ] = ( parts[ 1 ] || '' ).trim();
     });
 
-    if(cookies["myJam_sessionId"]) {
+    if(cookies["my_cookie_name"]) {
       users.getById(cookies["my_cookie_name"], function(err, user) {
         if (user) {
           req.login(user, function(err) {
